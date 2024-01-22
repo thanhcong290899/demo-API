@@ -22,7 +22,7 @@ namespace DeMoAuthen.Controllers
             if (rs.Succeeded)
             {
                 return Ok(rs);
-            } return Unauthorized();
+            } return StatusCode(500);
         }
         [HttpPost("SignIn")]
             public async Task<IActionResult> SignIn(SignModel signModel)

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeMoAuthen.Data;
 
+using DeMoAuthen.Helpers;
+using Microsoft.AspNetCore.Authorization;
+
 namespace DeMoAuthen.Controllers
 {
     [Route("api/[controller]")]
@@ -22,6 +25,7 @@ namespace DeMoAuthen.Controllers
 
         // GET: api/BookDBs
         [HttpGet]
+        [Authorize(Roles =AppRole.Customer)]
         public async Task<ActionResult<IEnumerable<BookDB>>> GetBookDBs()
         {
           if (_context.BookDBs == null)
@@ -33,6 +37,7 @@ namespace DeMoAuthen.Controllers
 
         // GET: api/BookDBs/5
         [HttpGet("{id}")]
+    
         public async Task<ActionResult<BookDB>> GetBookDB(int id)
         {
           if (_context.BookDBs == null)

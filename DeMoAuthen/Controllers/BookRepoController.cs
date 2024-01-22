@@ -1,4 +1,5 @@
 ﻿/*
+using DeMoAuthen.Helpers;
 using DeMoAuthen.Models;
 using DeMoAuthen.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,7 @@ namespace DeMoAuthen.Controllers
             _repo = repo;
         }
         [HttpGet]
+        [Authorize(Roles = AppRole.Customer)]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -30,6 +32,7 @@ namespace DeMoAuthen.Controllers
             }
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = AppRole.Admin)]
         public async Task<IActionResult> GetById(int id)
         {
             var book = await _repo.GetById(id);
@@ -43,7 +46,7 @@ namespace DeMoAuthen.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+      
         public async Task<IActionResult> AddBook(BookModel model)
         {
             var book = await _repo.AddBook(model);
@@ -57,7 +60,7 @@ namespace DeMoAuthen.Controllers
 
         }
         [HttpDelete("{id}")]
-        [Authorize]
+      
         public async Task<IActionResult> DeleteBook(int id)
         {
             await _repo.DeleteBook(id);
