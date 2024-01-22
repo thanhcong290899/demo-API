@@ -16,13 +16,12 @@ namespace demoAPI.Controllers
             return Ok(sinhViens);
         }
         [HttpPost]
-        public IActionResult PostSinhVien(SinhVienMV sinhVienMv)
+        public IActionResult PostSinhVien(SinhVien sinhVienMv)
         {
             var sinhvien = new SinhVien
             {
                 MaSinhVien = Guid.NewGuid(),
-                TenSinhVien = sinhVienMv.TenSinhVien,
-                NamSinh = sinhVienMv.NamSinh,
+                TenSV = sinhVienMv.TenSV,
                 Email = sinhVienMv.Email,
                 DiaChi = sinhVienMv.DiaChi,
                 SDT = sinhVienMv.SDT,
@@ -63,9 +62,8 @@ namespace demoAPI.Controllers
                 {
                     return NotFound();
                 }
-                sinhvien.TenSinhVien = sinhVienEdit.TenSinhVien;
+                sinhvien.TenSV = sinhVienEdit.TenSV;
                 sinhvien.DiaChi = sinhVienEdit.DiaChi;
-                sinhvien.NamSinh = sinhVienEdit.NamSinh;
                 sinhvien.Email = sinhVienEdit.Email;
                 sinhvien.SDT = sinhVienEdit.SDT;
                 return Ok(sinhvien);

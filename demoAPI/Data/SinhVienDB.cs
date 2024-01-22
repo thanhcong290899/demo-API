@@ -13,5 +13,7 @@ namespace demoAPI.Data
         public string? DiaChi { get;set; }
         public string? Email { get; set; }
         public string? SDT { get; set;}
+
+       
     }
 }

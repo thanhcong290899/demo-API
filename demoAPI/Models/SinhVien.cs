@@ -1,14 +1,14 @@
 ﻿namespace demoAPI.Models
 {
-    public class SinhVienMV
+    public class SinhVienMv
     {
-        public string TenSinhVien { get; set; }
-        public int NamSinh { get; set; }
-        public string DiaChi { get; set; }
-        public string Email { get; set; }
-        public string SDT {  get; set; }
+        public string? TenSV { get; set; }
+        public string? DiaChi { get; set; }
+        public string? Email { get; set; }
+        public string? SDT { get; set; }
+
     }
-    public class SinhVien : SinhVienMV
+    public class SinhVien : SinhVienMv
     {
         public Guid MaSinhVien { get; set; }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using demoAPI.Data;
+using demoAPI.Models;
 
 namespace demoAPI.Controllers
 {
@@ -19,106 +20,98 @@ namespace demoAPI.Controllers
         {
             _context = context;
         }
-
-        // GET: api/SinhVienDBs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SinhVienDB>>> GetSinhViens()
-        {
-          if (_context.SinhViens == null)
-          {
-              return NotFound();
-          }
-            return await _context.SinhViens.ToListAsync();
+        public IActionResult GetAll() {
+            var sinhVien = _context.SinhViens.ToList();
+            return Ok(sinhVien);
         }
-
-        // GET: api/SinhVienDBs/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SinhVienDB>> GetSinhVienDB(Guid id)
-        {
-          if (_context.SinhViens == null)
-          {
-              return NotFound();
-          }
-            var sinhVienDB = await _context.SinhViens.FindAsync(id);
-
-            if (sinhVienDB == null)
+        [HttpPost]
+        public IActionResult CreatNew(SinhVien sinhVien) {
+            try
             {
-                return NotFound();
+                var sv = new SinhVienDB
+                {
+                    TenSV = sinhVien.TenSV,
+                    DiaChi = sinhVien.DiaChi,
+                    Email = sinhVien.Email,
+                    SDT = sinhVien.SDT,
+
+
+                };
+                _context.Add(sv);
+                _context.SaveChanges();
+                return Ok(sv);
             }
-
-            return sinhVienDB;
-        }
-
-        // PUT: api/SinhVienDBs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSinhVienDB(Guid id, SinhVienDB sinhVienDB)
-        {
-            if (id != sinhVienDB.MaSV)
+            catch
             {
                 return BadRequest();
             }
-
-            _context.Entry(sinhVienDB).State = EntityState.Modified;
-
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById(String id) {
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SinhVienDBExists(id))
+                var sv = _context.SinhViens.SingleOrDefault(s => s.MaSV == Guid.Parse(id));
+                if (sv == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return Ok(sv);
                 }
             }
-
-            return NoContent();
+            catch
+            {
+                return BadRequest();
+            }
         }
-
-        // POST: api/SinhVienDBs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<SinhVienDB>> PostSinhVienDB(SinhVienDB sinhVienDB)
+        [HttpPut("{id}")]
+        public IActionResult Update(String id, SinhVien sinhVien)
         {
-          if (_context.SinhViens == null)
-          {
-              return Problem("Entity set 'ApiDbContext.SinhViens'  is null.");
-          }
-            sinhVienDB.MaSV = new Guid();
-            _context.SinhViens.Add(sinhVienDB);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSinhVienDB", new { id = new Guid() }, sinhVienDB);
+            try
+            {
+                var sv = _context.SinhViens.SingleOrDefault(s => s.MaSV == Guid.Parse(id));
+                if (sv == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    sv.TenSV = sinhVien.TenSV;
+                    sv.DiaChi = sinhVien.DiaChi;
+                    sv.SDT = sinhVien.SDT;
+                    sv.Email = sinhVien.Email;
+                    _context.SaveChanges();
+                    return Ok();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
-
-        // DELETE: api/SinhVienDBs/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSinhVienDB(Guid id)
+        public IActionResult Delete(String id)
         {
-            if (_context.SinhViens == null)
+            try
             {
-                return NotFound();
+                var sv = _context.SinhViens.SingleOrDefault(s => s.MaSV == Guid.Parse(id));
+                if (sv == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _context.Remove(sv);
+                    _context.SaveChanges();
+                    return Ok();
+                }
             }
-            var sinhVienDB = await _context.SinhViens.FindAsync(id);
-            if (sinhVienDB == null)
+            catch
             {
-                return NotFound();
+                return BadRequest();
             }
-
-            _context.SinhViens.Remove(sinhVienDB);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SinhVienDBExists(Guid id)
-        {
-            return (_context.SinhViens?.Any(e => e.MaSV == id)).GetValueOrDefault();
         }
     }
 }

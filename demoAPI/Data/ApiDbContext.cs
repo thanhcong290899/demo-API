@@ -9,6 +9,8 @@ namespace demoAPI.Data;
 
     #region DbSet
     public DbSet<SinhVienDB> SinhViens { get; set; }
+
+    public DbSet<LopHoc> lopHocs { get; set; }
     #endregion
 }
 
